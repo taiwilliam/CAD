@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LoginComponent } from './features/auth/login/login.component';
-import { HomeComponent } from './features/home/home.component';
 import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 
@@ -9,8 +9,8 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent }
     ]
   },
   {
@@ -21,5 +21,5 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent }
     ]
   },
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
