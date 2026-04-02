@@ -1,0 +1,91 @@
+<mat-toolbar class="sticky top-0 z-30 border-b border-slate-200 !bg-white">
+  <div class="mx-auto flex w-full items-center gap-4">
+    <button mat-icon-button type="button" aria-label="Toggle side navigation" (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <h1 class="flex items-center gap-2 text-base font-semibold text-slate-800">
+      <img src="/logos/brand-logo.svg" alt="SynchroCAD logo" class="h-7 w-7 object-contain" />
+      <span>
+        Synchro<span class="text-teal-400">CAD</span>
+      </span>
+    </h1>
+
+    <div class="ml-auto flex items-center gap-3">
+      <button mat-icon-button type="button" aria-label="Notifications" matBadge="3" matBadgeColor="warn" >
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button type="button" [matMenuTriggerFor]="menu" class="border-1 border-slate-200">
+        <img src="/images/avatar.png" alt="User avatar" class="h-full w-full object-cover"/>
+      </button>
+      <mat-menu #menu="matMenu" panelClass="!bg-white">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item routerLink="/auth/login">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="h-[calc(100vh-64px)] !bg-slate-100">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    class="border-r border-slate-200 !rounded-none [--mat-sidenav-container-shape:0px] !bg-white"
+  >
+    <div class="flex h-full flex-col p-3">
+      <div class="mb-3 rounded-2xl border border-slate-200 bg-white p-3">
+        <p class="text-sm font-semibold text-slate-700">William tai</p>
+        <p class="text-xs text-slate-400">williamTai&#64;gmail.com</p>
+      </div>
+
+      <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Navigation</p>
+      <mat-nav-list>
+        <a
+          mat-list-item
+          routerLink="/home"
+          routerLinkActive="!bg-white !font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="!mb-1 !rounded-xl"
+        >
+          <mat-icon matListItemIcon>space_dashboard</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="/home" class="!mb-1 !rounded-xl" routerLinkActive="!bg-white !font-semibold">
+          <mat-icon matListItemIcon>security</mat-icon>
+          <span matListItemTitle>Part Verification</span>
+        </a>
+        <a mat-list-item routerLink="/home" class="!mb-1 !rounded-xl" routerLinkActive="!bg-white !font-semibold">
+          <mat-icon matListItemIcon>design_services</mat-icon>
+          <span matListItemTitle>Design Roles</span>
+        </a>
+      </mat-nav-list>
+
+      <p class="mb-1 mt-3 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400">Settings</p>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/home" class="!mb-1 !rounded-xl" routerLinkActive="!bg-white !font-semibold">
+          <mat-icon matListItemIcon>settings</mat-icon>
+          <span matListItemTitle>General</span>
+        </a>
+      </mat-nav-list>
+
+      <div class="mt-auto rounded-2xl border border-slate-200 bg-white p-3">
+        <p class="text-xs font-semibold text-slate-700">Need help?</p>
+        <p class="mt-1 text-[11px] leading-4 text-slate-400">Read onboarding and dashboard usage guide.</p>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <main class="mx-auto max-w-[1600px] p-4 md:p-6">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
