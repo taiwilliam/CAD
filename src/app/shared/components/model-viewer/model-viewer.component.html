@@ -1,0 +1,17 @@
+<section class="space-y-3">
+  <div class="relative overflow-hidden bg-white">
+    @if (isLoading) {
+      <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/80 text-sm text-slate-500">
+        Loading 3D model...
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/90 px-6 text-center text-sm text-rose-600">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <div #viewerHost class="w-full" [style.height.px]="viewerHeight"></div>
+  </div>
+</section>

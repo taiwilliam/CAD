@@ -4,8 +4,15 @@
     <p class="text-sm text-slate-500">Welcome to your workspace</p>
   </div>
 
-  <app-cad-viewer
-    fileUrl="/DXF/95233A110_18-8.DXF"
-    [viewerHeight]="560"
-  />
+  <div class="grid gap-4 xl:grid-cols-2">
+    <app-cad-viewer
+      fileUrl="/DXF/95233A110_18-8.DXF"
+      [viewerHeight]="560"
+    />
+
+    <app-model-viewer
+      fileUrl="/GLB/pixellabs-robot-3332.glb"
+      [viewerHeight]="560"
+    />
+  </div>
 </section>
