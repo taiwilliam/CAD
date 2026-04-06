@@ -37,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/CAD/",
               "budgets": [
                 {
                   "type": "initial",
