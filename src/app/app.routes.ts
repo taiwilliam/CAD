@@ -7,11 +7,11 @@ import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.co
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -44,5 +44,5 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
     ],
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'auth/login' },
 ];

@@ -1,9 +1,180 @@
-<section class="space-y-4">
-  <div>
-    <h1 class="mb-1 text-2xl font-bold text-slate-900">Dashboard</h1>
-    <p class="text-sm text-slate-500">Welcome to your workspace</p>
+<section class="space-y-6">
+  <div class="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
+    @for (metric of metrics; track metric.title) {
+      <mat-card class="!rounded-xl">
+        <div class="flex items-start gap-4 p-5">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-xl"
+            [ngClass]="metric.iconClass"
+          >
+            <mat-icon>{{ metric.icon }}</mat-icon>
+          </div>
+
+          <div class="min-w-0">
+            <p class="text-sm font-medium text-slate-500">{{ metric.title }}</p>
+            <p class="mt-1 text-2xl font-bold text-slate-900">
+              {{ metric.value }}
+            </p>
+            <p class="mt-2 text-sm leading-5 text-slate-400">
+              {{ metric.caption }}
+            </p>
+          </div>
+        </div>
+      </mat-card>
+    }
   </div>
 
-  <div class="grid gap-4 xl:grid-cols-2">
+  <div class="grid gap-4 2xl:grid-cols-[minmax(0,1.4fr)_minmax(360px,0.9fr)]">
+    <div class="space-y-4">
+      <mat-card class="!rounded-xl">
+        <div class="border-b border-slate-200 p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-semibold text-slate-900">快速入口</h2>
+              <p class="mt-1 text-sm text-slate-500">
+                常用工作區與系統設定捷徑。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 p-5 md:grid-cols-3">
+          @for (link of quickLinks; track link.title) {
+            <a
+              [routerLink]="link.route"
+              class="rounded-xl border border-slate-200 p-4 transition hover:border-teal-200 hover:bg-teal-50/60"
+            >
+              <div
+                class="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-700"
+              >
+                <mat-icon>{{ link.icon }}</mat-icon>
+              </div>
+              <p class="mt-4 font-semibold text-slate-900">{{ link.title }}</p>
+              <p class="mt-2 text-sm leading-6 text-slate-500">
+                {{ link.description }}
+              </p>
+              <div
+                class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-teal-600"
+              >
+                <span>{{ link.actionLabel }}</span>
+                <mat-icon class="!text-base">arrow_forward</mat-icon>
+              </div>
+            </a>
+          }
+        </div>
+      </mat-card>
+
+      <mat-card class="!rounded-xl">
+        <div class="border-b border-slate-200 p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-semibold text-slate-900">待辦驗證清單</h2>
+              <p class="mt-1 text-sm text-slate-500">
+                最近更新的零件項目，可直接進入明細頁處理。
+              </p>
+            </div>
+
+            <a
+              routerLink="/part-verification"
+              class="text-sm font-medium text-teal-600 hover:text-teal-700"
+            >
+              查看全部
+            </a>
+          </div>
+        </div>
+
+        <div class="space-y-3 p-5">
+          @for (task of tasks; track task.id) {
+            <a
+              [routerLink]="task.route"
+              class="flex flex-col gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-teal-200 hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+            >
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <p class="font-semibold text-slate-900">
+                    {{ task.partNumber }}
+                  </p>
+                  <span
+                    class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                    [ngClass]="task.statusClass"
+                  >
+                    {{ task.statusLabel }}
+                  </span>
+                </div>
+                <p class="mt-1 text-sm text-slate-500">{{ task.partName }}</p>
+              </div>
+
+              <div class="grid gap-1 text-sm text-slate-500 md:text-right">
+                <p>承辦：{{ task.owner }}</p>
+                <p>最近更新：{{ task.updatedAt }}</p>
+              </div>
+            </a>
+          }
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="space-y-4">
+      <mat-card class="!rounded-xl">
+        <div class="border-b border-slate-200 p-5">
+          <h2 class="text-lg font-semibold text-slate-900">團隊快照</h2>
+          <p class="mt-1 text-sm text-slate-500">
+            目前專案執行成效與負載概況。
+          </p>
+        </div>
+
+        <div class="space-y-3 p-5">
+          @for (snapshot of teamSnapshots; track snapshot.label) {
+            <div class="rounded-xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                {{ snapshot.label }}
+              </p>
+              <p class="mt-2 text-2xl font-bold text-slate-900">
+                {{ snapshot.value }}
+              </p>
+              <p class="mt-2 text-sm leading-6 text-slate-500">
+                {{ snapshot.caption }}
+              </p>
+            </div>
+          }
+        </div>
+      </mat-card>
+
+      <mat-card class="!rounded-xl">
+        <div class="border-b border-slate-200 p-5">
+          <h2 class="text-lg font-semibold text-slate-900">最近活動</h2>
+          <p class="mt-1 text-sm text-slate-500">
+            系統驗證流程與通知事件更新。
+          </p>
+        </div>
+
+        <div class="space-y-4 p-5">
+          @for (activity of activities; track activity.title) {
+            <div class="flex gap-3">
+              <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                [ngClass]="activity.iconClass"
+              >
+                <mat-icon class="!text-lg">{{ activity.icon }}</mat-icon>
+              </div>
+
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <p class="font-medium text-slate-900">{{ activity.title }}</p>
+                  <span class="text-xs text-slate-400">{{
+                    activity.timestamp
+                  }}</span>
+                </div>
+                <p class="mt-1 text-sm leading-6 text-slate-500">
+                  {{ activity.description }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card>
+    </div>
   </div>
 </section>
