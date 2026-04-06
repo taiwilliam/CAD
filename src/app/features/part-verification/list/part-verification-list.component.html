@@ -1,0 +1,113 @@
+<section class="space-y-6">
+  <div class="grid gap-4 xl:grid-cols-3">
+    <mat-card class="!rounded-xl">
+      <div class="p-3">
+        <p class="text-sm font-medium text-slate-500 mb-2">零件類別</p>
+        <p class="text-xl font-bold">{{ categorySummary }}</p>
+      </div>
+    </mat-card>
+    <mat-card class="!rounded-xl">
+      <div class="p-3">
+        <p class="text-sm font-medium text-slate-500 mb-2">零件數</p>
+        <p class="text-xl font-bold">{{ parts.length }}</p>
+      </div>
+    </mat-card>
+    <mat-card class="!rounded-xl">
+      <div class="p-3">
+        <p class="text-sm font-medium text-slate-500 mb-2">驗證零件</p>
+        <p class="text-xl font-bold">{{ completedCount }}</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="!rounded-xl p-4">
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="parts" class="[&_td]:!py-2">
+        <ng-container matColumnDef="partNumber">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            零件編號
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.partNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="partName">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            零件名稱
+          </th>
+          <td mat-cell *matCellDef="let part">
+            <div class="min-w-[260px]">
+              <p class="font-semibold text-slate-900">{{ part.partName }}</p>
+              <p class="mt-1 text-sm text-slate-500">{{ part.description }}</p>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="standard">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            標準
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.standard }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="material">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            材質
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.material }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="revision">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            版次
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.revision }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="owner">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            承辦人員
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.owner }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            最近更新
+          </th>
+          <td mat-cell *matCellDef="let part">{{ part.updatedAt }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            驗證狀態
+          </th>
+          <td mat-cell *matCellDef="let part">
+            <span
+              class="rounded-full px-2 py-1 text-xs whitespace-nowrap"
+              [ngClass]="getStatusClass(part.status)"
+              >{{ getStatusLabel(part.status) }}</span
+            >
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
+            操作
+          </th>
+          <td mat-cell *matCellDef="let part">
+            <button mat-icon-button type="button" (click)="openDetail(part.id)">
+              <mat-icon>search</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns"
+          class="bg-slate-50"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card>
+</section>

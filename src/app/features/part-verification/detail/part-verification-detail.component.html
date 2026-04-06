@@ -1,0 +1,143 @@
+<section class="space-y-6">
+  <div class="grid gap-4 xl:grid-cols-3">
+    @for (card of summaryCards; track card.title) {
+      <mat-card class="!rounded-xl">
+        <div class="flex items-start gap-4 p-4">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-600"
+          >
+            <mat-icon>{{ card.icon }}</mat-icon>
+          </div>
+
+          <div class="min-w-0">
+            <p class="text-sm font-medium text-teal-500">{{ card.title }}</p>
+            <p class="mt-1 text-xl font-semibold text-slate-900">
+              {{ card.value }}
+            </p>
+            <p class="mt-1 text-sm text-slate-400">{{ card.caption }}</p>
+          </div>
+        </div>
+      </mat-card>
+    }
+  </div>
+
+  <div class="grid gap-4">
+    <div class="grid gap-4 xl:grid-cols-2">
+      <mat-card class="!rounded-xl p-4">
+        <app-cad-viewer
+          [fileUrl]="cadFileUrl"
+          [viewerHeight]="viewerHeight()"
+        />
+      </mat-card>
+      <mat-card class="!rounded-xl p-4">
+        <app-model-viewer
+          [fileUrl]="modelFileUrl"
+          [viewerHeight]="viewerHeight()"
+        />
+      </mat-card>
+    </div>
+
+    <div class="space-y-4">
+      <mat-card class="!rounded-xl">
+        <div class="space-y-4 p-5">
+          <!-- <div
+            class="rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600"
+          >
+            {{ part.notes }}
+          </div> -->
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                承辦人員
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.owner }}
+              </p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                允收公差
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.tolerance }}
+              </p>
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                零件類別
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.category }}
+              </p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                材質
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.material }}
+              </p>
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                圖號
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.drawingNumber }}
+              </p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 p-4">
+              <p
+                class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+              >
+                專案代號
+              </p>
+              <p class="mt-2 text-sm font-medium text-slate-800">
+                {{ part.projectCode }}
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 p-4">
+            <p
+              class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+            >
+              技術規格
+            </p>
+            <p class="mt-2 text-sm font-medium text-slate-800">
+              {{ part.specification }}
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 p-4">
+            <p
+              class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+            >
+              零件說明
+            </p>
+            <p class="mt-2 text-sm font-medium leading-6 text-slate-800">
+              {{ part.description }}
+            </p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</section>

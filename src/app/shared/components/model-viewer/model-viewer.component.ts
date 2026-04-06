@@ -7,17 +7,23 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-model-viewer',
   standalone: true,
-  templateUrl: './model-viewer.component.html'
+  imports: [MatButtonModule, MatIconModule],
+  templateUrl: './model-viewer.component.html',
 })
-export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class ModelViewerComponent
+  implements AfterViewInit, OnChanges, OnDestroy
+{
   @Input() fileUrl = '';
   @Input() viewerHeight = 560;
+  @Input() showResetButton = true;
 
   @ViewChild('viewerHost', { static: true })
   private viewerHost?: ElementRef<HTMLDivElement>;
@@ -48,8 +54,10 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
 
-    if ((changes['fileUrl'] && !changes['fileUrl'].firstChange) ||
-        (changes['viewerHeight'] && !changes['viewerHeight'].firstChange)) {
+    if (
+      (changes['fileUrl'] && !changes['fileUrl'].firstChange) ||
+      (changes['viewerHeight'] && !changes['viewerHeight'].firstChange)
+    ) {
       this.handleResize();
       await this.loadModel();
     }
@@ -78,6 +86,11 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
     }
   }
 
+  protected resetView(): void {
+    this.controls?.reset?.();
+    this.controls?.update?.();
+  }
+
   private async initializeViewer(): Promise<void> {
     if (!this.viewerHost) {
       this.errorMessage = 'Viewer container not found.';
@@ -86,7 +99,8 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
     }
 
     const THREE = await import('three');
-    const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
+    const { OrbitControls } =
+      await import('three/examples/jsm/controls/OrbitControls.js');
 
     const host = this.viewerHost.nativeElement;
     const width = host.clientWidth || 800;
@@ -146,7 +160,8 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
 
     try {
       const THREE = await import('three');
-      const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
+      const { GLTFLoader } =
+        await import('three/examples/jsm/loaders/GLTFLoader.js');
       const loader = new GLTFLoader();
       const gltf = await loader.loadAsync(this.fileUrl);
 
@@ -167,7 +182,8 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
       this.scene.add(model);
       this.fitCameraToObject(model, THREE);
     } catch (error) {
-      this.errorMessage = error instanceof Error ? error.message : 'Failed to load GLB model.';
+      this.errorMessage =
+        error instanceof Error ? error.message : 'Failed to load GLB model.';
     } finally {
       this.isLoading = false;
     }
@@ -183,11 +199,16 @@ export class ModelViewerComponent implements AfterViewInit, OnChanges, OnDestroy
 
     this.camera.near = Math.max(0.1, distance / 100);
     this.camera.far = distance * 100;
-    this.camera.position.set(center.x + distance * 0.9, center.y + distance * 0.45, center.z + distance * 1.2);
+    this.camera.position.set(
+      center.x + distance * 0.9,
+      center.y + distance * 0.45,
+      center.z + distance * 1.2,
+    );
     this.camera.updateProjectionMatrix();
 
     this.controls.target.copy(center);
     this.controls.update();
+    this.controls.saveState?.();
   }
 
   private handleResize(): void {

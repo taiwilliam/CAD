@@ -1,9 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
+@use "@angular/material" as mat;
 @import "tailwindcss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@include mat.core();
+
+$cad-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 600);
+$cad-accent: mat.m2-define-palette(mat.$m2-cyan-palette, 500);
+$cad-warn: mat.m2-define-palette(mat.$m2-red-palette, 600);
+
+$cad-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $cad-primary,
+      accent: $cad-accent,
+      warn: $cad-warn
+    ),
+    typography: mat.m2-define-typography-config(),
+    density: 0
+  )
+);
+
+@include mat.all-component-themes($cad-theme);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 @layer base {
   body {

@@ -1,14 +1,27 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import type { DxfViewer } from 'dxf-viewer';
 
 @Component({
   selector: 'app-cad-viewer',
   standalone: true,
-  templateUrl: './cad-viewer.component.html'
+  imports: [MatButtonModule, MatIconModule],
+  templateUrl: './cad-viewer.component.html',
 })
 export class CadViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() fileUrl = '';
   @Input() viewerHeight = 560;
+  @Input() showResetButton = true;
 
   @ViewChild('viewerHost', { static: true })
   private viewerHost?: ElementRef<HTMLDivElement>;
@@ -48,6 +61,28 @@ export class CadViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.viewer = null;
   }
 
+  protected resetView(): void {
+    if (!this.viewer) {
+      return;
+    }
+
+    const bounds = this.viewer.GetBounds();
+    const origin = this.viewer.GetOrigin();
+
+    if (!bounds || !origin) {
+      return;
+    }
+
+    this.viewer.FitView(
+      bounds.minX - origin.x,
+      bounds.maxX - origin.x,
+      bounds.minY - origin.y,
+      bounds.maxY - origin.y,
+      0.1,
+    );
+    this.viewer.Render();
+  }
+
   private async loadViewer(): Promise<void> {
     if (!this.viewerHost) {
       this.errorMessage = 'Viewer container not found.';
@@ -75,12 +110,13 @@ export class CadViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
         clearColor: new Color(0xffffff),
         clearAlpha: 1,
         canvasAlpha: false,
-        colorCorrection: true
+        colorCorrection: true,
       });
 
       await this.viewer.Load({ url: this.fileUrl });
     } catch (error) {
-      this.errorMessage = error instanceof Error ? error.message : 'Failed to load DXF file.';
+      this.errorMessage =
+        error instanceof Error ? error.message : 'Failed to load DXF file.';
     } finally {
       this.isLoading = false;
     }
