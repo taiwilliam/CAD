@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-beasties-container>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="utf-8" />
+    <title>CAD</title>
+    <base href="/CAD/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="logo.svg" />
+    <script>
+      // SPA routing fallback for GitHub Pages
+      // Redirect to index.html with the original path as a query parameter
+      (function () {
+        const currentUrl =
+          window.location.pathname +
+          window.location.search +
+          window.location.hash;
+        const basePath = "/CAD/";
+
+        // Only redirect if we're not already at the base index
+        if (
+          !currentUrl.includes("index.html") &&
+          currentUrl !== basePath &&
+          currentUrl !== basePath + "?"
+        ) {
+          // Remove the base path and preserve the rest
+          const redirect = currentUrl.replace(basePath, "").replace(/^\//, "");
+          if (redirect) {
+            // Redirect to index.html with the original path as query parameter
+            window.location.replace(basePath + "?redirect=/" + redirect);
+          } else {
+            // Just go to base if nothing to preserve
+            window.location.replace(basePath);
+          }
+        }
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        font-family:
+          Roboto,
+          Helvetica Neue,
+          sans-serif;
+        background: #fafafa;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      h1 {
+        margin: 0 0 0.5em 0;
+        font-size: 2em;
+        color: #333;
+      }
+      p {
+        margin: 0;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <h1>Redirecting...</h1>
+      <p>
+        If you are not automatically redirected, please try again or return to
+        the <a href="/CAD/">home page</a>.
+      </p>
+    </div>
+  </body>
+</html>
