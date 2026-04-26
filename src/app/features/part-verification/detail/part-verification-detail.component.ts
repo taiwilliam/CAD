@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs';
@@ -10,8 +10,9 @@ import { CadViewerComponent } from '../../../shared/components/cad-viewer/cad-vi
 import { ModelViewerComponent } from '../../../shared/components/model-viewer/model-viewer.component';
 import {
   PART_VERIFICATION_STATUS_LABEL,
-  partVerificationItems,
+  PartVerificationStatus,
 } from '../part-verification.data';
+import { PartVerificationStore } from '../part-verification.store';
 
 @Component({
   selector: 'app-part-verification-detail',
@@ -26,11 +27,11 @@ import {
   templateUrl: './part-verification-detail.component.html',
   styleUrl: './part-verification-detail.component.scss',
 })
-export class PartVerificationDetailComponent {
+export class PartVerificationDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly breakpointObserver = inject(BreakpointObserver);
+  protected readonly store = inject(PartVerificationStore);
 
-  // 根據裝置寬度回傳不同的 viewer 高度（px）。
   protected readonly viewerHeight = toSignal(
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium])
@@ -39,38 +40,46 @@ export class PartVerificationDetailComponent {
           if (this.breakpointObserver.isMatched(Breakpoints.XSmall)) return 280;
           if (this.breakpointObserver.isMatched(Breakpoints.Small)) return 360;
           if (this.breakpointObserver.isMatched(Breakpoints.Medium)) return 420;
-          return 560; // Large / XLarge
+          return 560;
         }),
       ),
     { initialValue: 560 },
   );
 
-  protected readonly part =
-    partVerificationItems.find(
-      (item) => item.id === this.route.snapshot.paramMap.get('id'),
-    ) ?? partVerificationItems[0];
+  protected readonly part = this.store.currentPart;
 
-  protected readonly cadFileUrl = this.part.cadFileUrl;
-  protected readonly modelFileUrl = this.part.modelFileUrl;
+  protected readonly cadFileUrl = computed(() => this.store.currentPart()?.cad_file_url ?? '');
+  protected readonly modelFileUrl = computed(() => this.store.currentPart()?.model_file_url ?? '');
 
-  protected readonly summaryCards = [
-    {
-      title: '零件編號',
-      value: this.part.partNumber,
-      caption: this.part.partName,
-      icon: 'precision_manufacturing',
-    },
-    {
-      title: '驗證狀態',
-      value: PART_VERIFICATION_STATUS_LABEL[this.part.status],
-      caption: '圖檔與模型之比對結果摘要',
-      icon: 'verified',
-    },
-    {
-      title: '版次',
-      value: this.part.revision,
-      caption: `最近更新：${this.part.updatedAt}`,
-      icon: 'history',
-    },
-  ] as const;
+  protected readonly summaryCards = computed(() => {
+    const part = this.store.currentPart();
+    if (!part) return [];
+    return [
+      {
+        title: '零件編號',
+        value: part.part_number,
+        caption: part.part_name,
+        icon: 'precision_manufacturing',
+      },
+      {
+        title: '驗證狀態',
+        value: PART_VERIFICATION_STATUS_LABEL[part.status as PartVerificationStatus],
+        caption: '圖檔與模型之比對結果摘要',
+        icon: 'verified',
+      },
+      {
+        title: '版次',
+        value: part.revision,
+        caption: `最近更新：${part.updated_at?.slice(0, 10) ?? ''}`,
+        icon: 'history',
+      },
+    ];
+  });
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.store.loadPart(id);
+    }
+  }
 }

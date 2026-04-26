@@ -1,5 +1,5 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +9,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import {
   PART_VERIFICATION_STATUS_LABEL,
   PartVerificationStatus,
-  partVerificationItems,
 } from '../part-verification.data';
 import { PartVerificationStore } from '../part-verification.store';
 
@@ -17,6 +16,7 @@ import { PartVerificationStore } from '../part-verification.store';
   selector: 'app-part-verification-list',
   standalone: true,
   imports: [
+    DatePipe,
     NgClass,
     MatButtonModule,
     MatCardModule,
@@ -36,12 +36,26 @@ export class PartVerificationListComponent implements OnInit {
       const users = this.store.users();
       if (users.length > 0) {
         console.log('[PartVerificationList] users loaded:', users);
-        // 只取第一個 user 示範
         const first = users[0];
         if (first) {
           console.log('第一位 user name:', first.name);
           console.log('第一位 user email:', first.email);
         }
+      }
+    });
+
+    effect(() => {
+      const parts = this.store.parts();
+      if (parts.length > 0) {
+        console.log('[PartVerificationList] parts loaded:', parts);
+        console.log('第一筆 part:', parts[0]);
+      }
+    });
+
+    effect(() => {
+      const err = this.store.partsError();
+      if (err) {
+        console.error('[PartVerificationList] parts API error:', err);
       }
     });
   }
@@ -51,10 +65,10 @@ export class PartVerificationListComponent implements OnInit {
     [PartVerificationStatus.Pending]: 'bg-amber-100 text-amber-700',
     [PartVerificationStatus.Completed]: 'bg-emerald-100 text-emerald-700',
   };
-  protected readonly parts = partVerificationItems;
-  protected readonly completedCount = this.parts.filter(
-    (part) => part.status === PartVerificationStatus.Completed,
-  ).length;
+  protected readonly parts = this.store.parts;
+  protected readonly completedCount = computed(() =>
+    this.store.parts().filter((p) => p.status === PartVerificationStatus.Completed).length,
+  );
   protected readonly categorySummary = '螺絲';
   protected readonly displayedColumns = [
     'partNumber',
@@ -78,9 +92,10 @@ export class PartVerificationListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.loadUsers();
+    this.store.loadParts();
   }
 
-  protected openDetail(id: string): void {
+  protected openDetail(id: number | string): void {
     void this.router.navigate(['/part-verification', id]);
   }
 }

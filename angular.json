@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "docs",
+              "base": "dist/CAD",
               "browser": ""
             },
             "index": "src/index.html",
@@ -37,7 +37,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/CAD/",
+              "baseHref": "/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

@@ -9,25 +9,25 @@
     <mat-card class="!rounded-xl">
       <div class="p-3">
         <p class="text-sm font-medium text-slate-500 mb-2">零件數</p>
-        <p class="text-xl font-bold">{{ parts.length }}</p>
+        <p class="text-xl font-bold">{{ parts().length }}</p>
       </div>
     </mat-card>
     <mat-card class="!rounded-xl">
       <div class="p-3">
         <p class="text-sm font-medium text-slate-500 mb-2">驗證零件</p>
-        <p class="text-xl font-bold">{{ completedCount }}</p>
+        <p class="text-xl font-bold">{{ completedCount() }}</p>
       </div>
     </mat-card>
   </div>
 
   <mat-card class="!rounded-xl p-4">
     <div class="overflow-x-auto">
-      <table mat-table [dataSource]="parts" class="[&_td]:!py-2">
+      <table mat-table [dataSource]="parts()" class="[&_td]:!py-2">
         <ng-container matColumnDef="partNumber">
           <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
             零件編號
           </th>
-          <td mat-cell *matCellDef="let part">{{ part.partNumber }}</td>
+          <td mat-cell *matCellDef="let part">{{ part.part_number }}</td>
         </ng-container>
 
         <ng-container matColumnDef="partName">
@@ -36,7 +36,7 @@
           </th>
           <td mat-cell *matCellDef="let part">
             <div class="min-w-[260px]">
-              <p class="font-semibold text-slate-900">{{ part.partName }}</p>
+              <p class="font-semibold text-slate-900">{{ part.part_name }}</p>
               <p class="mt-1 text-sm text-slate-500">{{ part.description }}</p>
             </div>
           </td>
@@ -74,7 +74,7 @@
           <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">
             最近更新
           </th>
-          <td mat-cell *matCellDef="let part">{{ part.updatedAt }}</td>
+          <td mat-cell *matCellDef="let part">{{ part.updated_at | date: 'yyyy/MM/dd' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
